@@ -1,0 +1,11 @@
+{
+  "name": "iszak-role",
+  "version": "0.0.1",
+  "author": "Iszak Bryan",
+  "summary": "A module for managing different role types",
+  "license": "Apache 2.0",
+  "source": "https://github.com/iszak/puppet-role.git",
+  "project_page": "https://github.com/iszak/puppet-role",
+  "issues_url": "https://github.com/iszak/puppet-role/issues",
+  "dependencies": []
+}
