@@ -22,7 +22,6 @@ class role::1001_beers_api (
 
     project::rails { '1001_beers_api':
         require           => [
-            Package['libmagic-dev'],
             Package['libsqlite3-dev']
         ],
 
