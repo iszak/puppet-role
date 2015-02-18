@@ -13,7 +13,9 @@ class role::uploadir_api (
     $web_path          = undef,
     $web_host          = undef,
 
-    $ssh_key           = undef
+    $ssh_key           = undef,
+
+    $environment       = undef
 ) {
     include profile::base
     include profile::apache
@@ -43,6 +45,8 @@ class role::uploadir_api (
         database_password => $database_password,
 
         ssh_key           => $ssh_key,
+
+        environment       => $environment,
 
         custom_fragment   => "
 XSendFile On\n
