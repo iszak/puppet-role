@@ -31,10 +31,6 @@ class role::phoenix_server (
         web_path          => $web_path,
         web_host          => $web_host,
 
-        database_name     => $database_name,
-        database_username => $database_username,
-        database_password => $database_password,
-
         ssh_key           => $ssh_key
     }
 }
