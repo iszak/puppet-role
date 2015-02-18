@@ -22,7 +22,7 @@ class role::uploadir_api (
 
     include apache::mod::xsendfile
 
-    project::ruby { 'uploadir_api':
+    project::rails { 'uploadir_api':
         require           => [
             Package['libmagic-dev'],
             Package['libsqlite3-dev']
@@ -51,10 +51,15 @@ XSendFilePath /home/uploadir/public/api/tmp/downloads/\n
         "
     }
 
-    package { [
-        'libmagic-dev',
-        'libsqlite3-dev'
-    ]:
-        ensure => latest
+    if (!defined(Package['libmagic-dev'])) {
+        package { 'libmagic-dev':
+            ensure => latest
+        }
+    }
+
+    if (!defined(Package['libsqlite3-dev'])) {
+        package { 'libsqlite3-dev':
+            ensure => latest
+        }
     }
 }

@@ -42,7 +42,9 @@ class role::1001_beers_api (
         ssh_key           => $ssh_key
     }
 
-    package { 'libsqlite3-dev':
-        ensure => latest
+    if (!defined(Package['libsqlite3-dev'])) {
+        package { 'libsqlite3-dev':
+            ensure => latest
+        }
     }
 }
