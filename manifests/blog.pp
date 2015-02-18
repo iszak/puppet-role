@@ -37,7 +37,7 @@ class role::blog (
         rails_env => 'production',
         bundle    => 'true',
         user      => $user,
-        group     => $group
+        group     => $group,
         cwd       => $repo_path
     }
 }
