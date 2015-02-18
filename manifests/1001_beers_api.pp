@@ -1,4 +1,4 @@
-class role::crowdwish_backend (
+class role::1001_beers_api (
     $user              = undef,
     $owner             = undef,
     $group             = undef,
@@ -17,18 +17,13 @@ class role::crowdwish_backend (
 ) {
     include profile::base
     include profile::apache
-    include profile::php
+    include profile::ruby
     include profile::postgresql
 
-    class { 'apache::mod::rewrite':
-        require => Class['profile::php']
-    }
-
-    project::zf2 { 'crowdwish_backend':
+    project::ruby { '1001_beers_api':
         require           => [
-            Package['php5-curl'],
-            Package['php5-intl'],
-            Package['php5-pgsql']
+            Package['libmagic-dev'],
+            Package['libsqlite3-dev']
         ],
 
         user              => $user,
@@ -41,8 +36,6 @@ class role::crowdwish_backend (
         web_path          => $web_path,
         web_host          => $web_host,
 
-        composer_path     => 'web',
-
         database_name     => $database_name,
         database_username => $database_username,
         database_password => $database_password,
@@ -50,17 +43,7 @@ class role::crowdwish_backend (
         ssh_key           => $ssh_key
     }
 
-    exec { 'crowdwish_backend_domain':
-        require => Project::Zf2['crowdwish_backend'],
-        command => "/bin/sed -i 's/example\\.com/${web_host}/' *local.php",
-        cwd     => '/home/vagrant/public/crowdwish-backend/web/config/autoload/'
-    }
-
-    package { [
-        'php5-curl',
-        'php5-intl',
-        'php5-pgsql'
-    ]:
+    package { 'libsqlite3-dev':
         ensure => latest
     }
 }
