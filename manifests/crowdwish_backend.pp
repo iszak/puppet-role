@@ -13,7 +13,8 @@ class role::crowdwish_backend (
     $web_path          = undef,
     $web_host          = undef,
 
-    $ssh_key           = undef
+    $ssh_key           = undef,
+    $environment       = undef,
 ) {
     include profile::base
     include profile::apache
@@ -47,7 +48,8 @@ class role::crowdwish_backend (
         database_username => $database_username,
         database_password => $database_password,
 
-        ssh_key           => $ssh_key
+        ssh_key           => $ssh_key,
+        environment       => $environment
     }
 
     exec { 'crowdwish_backend_domain':

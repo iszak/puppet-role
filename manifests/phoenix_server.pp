@@ -13,7 +13,9 @@ class role::phoenix_server (
     $web_path          = undef,
     $web_host          = undef,
 
-    $ssh_key           = undef
+    $ssh_key           = undef,
+
+    $environment       = undef,
 ) {
     include profile::base
     include profile::apache
@@ -31,6 +33,7 @@ class role::phoenix_server (
         web_path          => $web_path,
         web_host          => $web_host,
 
-        ssh_key           => $ssh_key
+        ssh_key           => $ssh_key,
+        environment       => $environment
     }
 }
