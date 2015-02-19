@@ -33,11 +33,11 @@ class role::phoenix_client (
 
     if (!defined(Package['grunt-cli'])) {
         package { 'grunt-cli':
-            require   => [
+            ensure   => present,
+            require  => [
                 Class[nodejs],
                 Package[npm],
             ],
-            ensure   => latest,
             provider => npm
         }
     }
@@ -45,8 +45,8 @@ class role::phoenix_client (
 
     if (!defined(Package['compass'])) {
         package { 'compass':
-            require   => Class[ruby::dev],
-            ensure   => latest,
+            ensure   => present,
+            require  => Class[ruby::dev],
             provider => gem
         }
     }
