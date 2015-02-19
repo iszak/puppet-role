@@ -9,9 +9,7 @@ class role::1001_beers_website (
     $web_path    = undef,
     $web_host    = undef,
 
-    $ssh_key     = undef,
-
-    $environment = undef,
+    $ssh_key     = undef
 ) {
     include profile::base
     include profile::apache
@@ -27,8 +25,6 @@ class role::1001_beers_website (
         web_path    => $web_path,
         web_host    => $web_host,
 
-        ssh_key     => $ssh_key,
-
-        environment => $environment
+        ssh_key     => $ssh_key
     }
 }

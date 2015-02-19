@@ -13,7 +13,9 @@ class role::1001_beers_api (
     $web_path          = undef,
     $web_host          = undef,
 
-    $ssh_key           = undef
+    $ssh_key           = undef,
+
+    $environment       = undef,
 ) {
     include profile::base
     include profile::apache
@@ -39,7 +41,9 @@ class role::1001_beers_api (
         database_username => $database_username,
         database_password => $database_password,
 
-        ssh_key           => $ssh_key
+        ssh_key           => $ssh_key,
+
+        environment       => $environment,
     }
 
     if (!defined(Package['libsqlite3-dev'])) {
