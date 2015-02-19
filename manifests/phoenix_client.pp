@@ -29,4 +29,25 @@ class role::phoenix_client (
 
         npm_install => true
     }
+
+
+    if (!defined(Package['grunt-cli'])) {
+        package { 'grunt-cli':
+            require   => [
+                Class[nodejs],
+                Package[npm],
+            ],
+            ensure   => latest,
+            provider => npm
+        }
+    }
+
+
+    if (!defined(Package['compass'])) {
+        package { 'compass':
+            require   => Class[ruby::dev],
+            ensure   => latest,
+            provider => gem
+        }
+    }
 }

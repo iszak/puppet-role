@@ -27,4 +27,16 @@ class role::psdless (
 
         ssh_key     => $ssh_key
     }
+
+
+    if (!defined(Package['grunt-cli'])) {
+        package { 'grunt-cli':
+            require   => [
+                Class[nodejs],
+                Package[npm],
+            ],
+            ensure   => latest,
+            provider => npm
+        }
+    }
 }
