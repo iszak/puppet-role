@@ -27,4 +27,34 @@ class role::1001_beers_website (
 
         ssh_key     => $ssh_key
     }
+
+    if (!defined(Package['grunt-cli'])) {
+        package { 'grunt-cli':
+            ensure   => present,
+            require  => [
+                Class[nodejs],
+                Package[npm],
+            ],
+            provider => npm
+        }
+    }
+
+    if (!defined(Package['bower'])) {
+        package { 'bower':
+            ensure   => present,
+            require  => [
+                Class[nodejs],
+                Package[npm],
+            ],
+            provider => npm
+        }
+    }
+
+    if (!defined(Package['compass'])) {
+        package { 'compass':
+            ensure   => present,
+            require  => Class[ruby::dev],
+            provider => gem
+        }
+    }
 }
