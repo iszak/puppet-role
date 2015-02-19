@@ -15,6 +15,8 @@ class role::blog (
     include profile::apache
     include profile::ruby
 
+    $project_path = "/home/${user}/${repo_path}"
+
     project::ruby { 'blog':
         user        => $user,
         owner       => $owner,
@@ -38,6 +40,6 @@ class role::blog (
         bundle    => 'true',
         user      => $user,
         group     => $group,
-        cwd       => $repo_path
+        cwd       => $project_path
     }
 }
