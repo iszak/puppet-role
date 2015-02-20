@@ -26,8 +26,9 @@ class role::uploadir_api (
 
     project::rails { 'uploadir_api':
         require           => [
+            Class[postgresql::lib::devel],
             Package['libmagic-dev'],
-            Package['libsqlite3-dev']
+            Package['libsqlite3-dev'],
         ],
 
         user              => $user,
