@@ -23,7 +23,7 @@ class role::1001_beers_api (
     include profile::postgresql
 
     project::rails { '1001_beers_api':
-        require           => [,
+        require           => [
             Class[postgresql::lib::devel],
             Package['libsqlite3-dev']
         ],
