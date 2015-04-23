@@ -24,6 +24,9 @@ class role::uploadir_api (
 
     include apache::mod::xsendfile
 
+    $home_path    = "/home/${user}"
+    $project_path = "${home_path}/${repo_path}"
+
     project::rails { 'uploadir_api':
         require           => [
             Class[postgresql::lib::devel],
@@ -51,8 +54,8 @@ class role::uploadir_api (
 
         custom_fragment   => "
 XSendFile On\n
-XSendFilePath /home/uploadir/public/api/uploads/\n
-XSendFilePath /home/uploadir/public/api/tmp/downloads/\n
+XSendFilePath ${project_path}/uploads/\n
+XSendFilePath ${project_path}/tmp/downloads/\n
         "
     }
 
