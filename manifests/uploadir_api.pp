@@ -27,6 +27,14 @@ class role::uploadir_api (
     $home_path    = "/home/${user}"
     $project_path = "${home_path}/${repo_path}"
 
+    if ($environment == 'production') {
+        $capistrano = true
+        $download_path = "${home_path}/shared"
+    } else {
+        $capistrano = false
+        $download_path = $project_path
+    }
+
     project::rails { 'uploadir_api':
         require           => [
             Class[postgresql::lib::devel],
@@ -51,11 +59,12 @@ class role::uploadir_api (
         ssh_key           => $ssh_key,
 
         environment       => $environment,
+        capistrano        => $capistrano,
 
         custom_fragment   => "
 XSendFile On\n
-XSendFilePath ${project_path}/uploads/\n
-XSendFilePath ${project_path}/tmp/downloads/\n
+XSendFilePath ${download_path}/uploads/\n
+XSendFilePath ${download_path}/tmp/downloads/\n
         "
     }
 
