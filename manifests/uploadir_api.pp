@@ -68,6 +68,23 @@ XSendFilePath ${download_path}/tmp/downloads/\n
         "
     }
 
+    file { [
+        "${download_path}/assets",
+        "${download_path}/bundle",
+        "${download_path}/config",
+        "${download_path}/log",
+        "${download_path}/public",
+        "${download_path}/system",
+        "${download_path}/uploads",
+        "${download_path}/tmp",
+        "${download_path}/tmp/downloads",
+        "${download_path}/vendor",
+    ]:
+        ensure => directory,
+        owner  => $owner,
+        group  => $group,
+    }
+
     if (!defined(Package['libmagic-dev'])) {
         package { 'libmagic-dev':
             ensure => latest
