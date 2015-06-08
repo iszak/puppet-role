@@ -9,7 +9,8 @@ class role::blog (
     $web_path    = undef,
     $web_host    = undef,
 
-    $ssh_key     = undef
+    $ssh_key     = undef,
+    $ssh_known_hosts = [],
 ) {
     include profile::base
     include profile::apache
@@ -28,7 +29,8 @@ class role::blog (
         web_path    => $web_path,
         web_host    => $web_host,
 
-        ssh_key     => $ssh_key
+        ssh_key     => $ssh_key,
+        ssh_known_hosts => $ssh_known_hosts,
     }
 
     ruby::rake { 'blog_generate':

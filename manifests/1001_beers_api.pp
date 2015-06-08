@@ -14,6 +14,7 @@ class role::1001_beers_api (
     $web_host          = undef,
 
     $ssh_key           = undef,
+    $ssh_known_hosts   = [],
 
     $environment       = undef,
 ) {
@@ -43,6 +44,7 @@ class role::1001_beers_api (
         database_password => $database_password,
 
         ssh_key           => $ssh_key,
+        ssh_known_hosts   => $ssh_known_hosts,
 
         environment       => $environment,
     }

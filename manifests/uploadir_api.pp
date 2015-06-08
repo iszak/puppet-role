@@ -14,6 +14,9 @@ class role::uploadir_api (
     $web_host          = undef,
 
     $ssh_key           = undef,
+    $ssh_key_path      = undef,
+    $ssh_config        = '',
+    $ssh_known_hosts   = [],
 
     $environment       = undef
 ) {
@@ -29,13 +32,13 @@ class role::uploadir_api (
 
     if ($environment == 'production') {
         $capistrano = true
-        $download_path = "${home_path}/shared"
+        $shared_path = "${home_path}/shared"
     } else {
         $capistrano = false
-        $download_path = $project_path
+        $shared_path = $project_path
     }
 
-    project::rails { 'uploadir_api':
+    project::rails { $title:
         require           => [
             Class[postgresql::lib::devel],
             Package['libmagic-dev'],
@@ -57,32 +60,29 @@ class role::uploadir_api (
         database_password => $database_password,
 
         ssh_key           => $ssh_key,
+        ssh_key_path      => $ssh_key_path,
+        ssh_config        => $ssh_config,
+        ssh_known_hosts   => $ssh_known_hosts,
 
         environment       => $environment,
         capistrano        => $capistrano,
 
         custom_fragment   => "
 XSendFile On\n
-XSendFilePath ${download_path}/uploads/\n
-XSendFilePath ${download_path}/tmp/downloads/\n
+XSendFilePath ${shared_path}/uploads/\n
+XSendFilePath ${shared_path}/tmp/downloads/\n
         "
     }
 
     file { [
-        "${download_path}/assets",
-        "${download_path}/bundle",
-        "${download_path}/config",
-        "${download_path}/log",
-        "${download_path}/public",
-        "${download_path}/system",
-        "${download_path}/uploads",
-        "${download_path}/tmp",
-        "${download_path}/tmp/downloads",
-        "${download_path}/vendor",
+        "${shared_path}/uploads",
+        "${shared_path}/tmp",
+        "${shared_path}/tmp/downloads",
     ]:
-        ensure => directory,
-        owner  => $owner,
-        group  => $group,
+        ensure  => directory,
+        require => Project::Client[$user],
+        owner   => $owner,
+        group   => $group,
     }
 
     if (!defined(Package['libmagic-dev'])) {
