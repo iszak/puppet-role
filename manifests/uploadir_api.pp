@@ -104,6 +104,8 @@ XSendFilePath ${shared_path}/tmp/downloads/\n
             File["/home/uploadir/current/uploads"],
             File["${shared_path}/uploads"],
         ],
+        user    => $user,
+        group   => $group,
     }
 
     if (!defined(Package['libmagic-dev'])) {
