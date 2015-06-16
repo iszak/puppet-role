@@ -9,7 +9,10 @@ class role::phoenix_client (
     $web_path    = undef,
     $web_host    = undef,
 
-    $ssh_key     = undef
+    $ssh_key           = undef,
+    $ssh_key_path      = undef,
+    $ssh_config        = '',
+    $ssh_known_hosts   = [],
 ) {
     include profile::base
     include profile::apache
@@ -23,9 +26,12 @@ class role::phoenix_client (
         repo_source => $repo_source,
 
         web_path    => $web_path,
-        web_host    => $web_host,
+        web_host        => $web_host,
 
-        ssh_key     => $ssh_key,
+        ssh_key         => $ssh_key,
+        ssh_key_path    => $ssh_key_path,
+        ssh_config      => $ssh_config,
+        ssh_known_hosts => $ssh_known_hosts,
 
         npm_install => true
     }
