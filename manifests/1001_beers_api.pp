@@ -14,6 +14,8 @@ class role::1001_beers_api (
     $web_host          = undef,
 
     $ssh_key           = undef,
+    $ssh_key_path      = undef,
+    $ssh_config        = '',
     $ssh_known_hosts   = [],
 
     $environment       = undef,
@@ -22,6 +24,12 @@ class role::1001_beers_api (
     include profile::apache
     include profile::ruby
     include profile::postgresql
+
+    if ($environment == 'production') {
+        $capistrano = true
+    } else {
+        $capistrano = false
+    }
 
     project::rails { '1001_beers_api':
         require           => [
@@ -44,9 +52,12 @@ class role::1001_beers_api (
         database_password => $database_password,
 
         ssh_key           => $ssh_key,
+        ssh_key_path      => $ssh_key_path,
         ssh_known_hosts   => $ssh_known_hosts,
+        ssh_config        => $ssh_config,
 
         environment       => $environment,
+        capistrano        => $capistrano,
     }
 
     if (!defined(Package['libsqlite3-dev'])) {
