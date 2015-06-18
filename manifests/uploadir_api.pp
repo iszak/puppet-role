@@ -74,11 +74,11 @@ XSendFilePath ${shared_path}/tmp/downloads/\n
         "
     }
 
-    file { [
-        "${project_path}/current/uploads",
+    exec { [
+        "/bin/rm -rf ${home_path}/current/uploads",
     ]:
-        ensure  => absent,
         require => Project::Rails[$title],
+        unless  => "/usr/bin/test -L ${shared_path}/uploads"
     }
 
     file { [
@@ -91,21 +91,16 @@ XSendFilePath ${shared_path}/tmp/downloads/\n
         group   => $group,
     }
 
-    file { "/home/uploadir/current/uploads":
-        ensure  => absent,
-        require => Project::Rails[$title],
-        force   => true,
-    }
-
     exec { [
         "/bin/ln --symbolic --force ${shared_path}/uploads /home/uploadir/current/uploads",
     ]:
         require => [
-            File["/home/uploadir/current/uploads"],
+            Exec["/bin/rm -rf ${home_path}/current/uploads"],
             File["${shared_path}/uploads"],
         ],
         user    => $user,
         group   => $group,
+        unless  => "/usr/bin/test -L ${shared_path}/uploads"
     }
 
     if (!defined(Package['libmagic-dev'])) {
