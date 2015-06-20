@@ -39,7 +39,6 @@ class role::1001_beers_website (
             ensure   => present,
             require  => [
                 Class[nodejs],
-                Package[npm],
             ],
             provider => npm
         }
@@ -50,7 +49,6 @@ class role::1001_beers_website (
             ensure   => present,
             require  => [
                 Class[nodejs],
-                Package[npm],
             ],
             provider => npm
         }

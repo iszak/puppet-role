@@ -42,7 +42,6 @@ class role::phoenix_client (
             ensure   => present,
             require  => [
                 Class[nodejs],
-                Package[npm],
             ],
             provider => npm
         }
