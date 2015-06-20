@@ -78,7 +78,7 @@ XSendFilePath ${shared_path}/tmp/downloads/\n
         "/bin/rm -rf ${home_path}/current/uploads",
     ]:
         require => Project::Rails[$title],
-        unless  => "/usr/bin/test -L ${shared_path}/uploads"
+        unless  => "/usr/bin/test -L ${home_path}/current/uploads"
     }
 
     file { [
@@ -100,7 +100,7 @@ XSendFilePath ${shared_path}/tmp/downloads/\n
         ],
         user    => $user,
         group   => $group,
-        unless  => "/usr/bin/test -L ${shared_path}/uploads"
+        unless  => "/usr/bin/test -L ${home_path}/current/uploads"
     }
 
     if (!defined(Package['libmagic-dev'])) {
