@@ -20,10 +20,13 @@ class role::crowdwish_backend (
 
     $environment       = undef,
 ) {
-    include profile::base
-    include profile::apache
-    include profile::php
-    include profile::postgresql
+    $home_path    = "/home/${user}"
+    $project_path = "${home_path}/${repo_path}"
+
+    include ::profile::base
+    include ::profile::apache
+    include ::profile::php
+    include ::profile::postgresql
 
     class { 'apache::mod::rewrite':
         require => Class['profile::php']
@@ -63,7 +66,7 @@ class role::crowdwish_backend (
     exec { 'crowdwish_backend_domain':
         require => Project::Zf2['crowdwish_backend'],
         command => "/bin/sed -i 's/example\\.com/${web_host}/' *local.php",
-        cwd     => '/home/vagrant/public/crowdwish-backend/web/config/autoload/'
+        cwd     => "${project_path}/web/config/autoload"
     }
 
     package { [
