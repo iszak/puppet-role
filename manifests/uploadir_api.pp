@@ -74,33 +74,31 @@ XSendFilePath ${shared_path}/tmp/downloads/\n
         "
     }
 
-    exec { [
-        "/bin/rm -rf ${home_path}/current/uploads",
-    ]:
-        require => Project::Rails[$title],
-        unless  => "/usr/bin/test -L ${home_path}/current/uploads"
-    }
+    if ($capistrano == true) {
+      exec { "/bin/rm -rf ${home_path}/current/uploads":
+          require => Project::Rails[$title],
+          unless  => "/usr/bin/test -L ${home_path}/current/uploads"
+      }
 
-    file { [
-        "${shared_path}/uploads",
-        "${shared_path}/tmp/downloads",
-    ]:
-        ensure  => directory,
-        require => Project::Rails[$title],
-        owner   => $owner,
-        group   => $group,
-    }
+      file { [
+          "${shared_path}/uploads",
+          "${shared_path}/tmp/downloads",
+      ]:
+          ensure  => directory,
+          require => Project::Rails[$title],
+          owner   => $owner,
+          group   => $group,
+      }
 
-    exec { [
-        "/bin/ln --symbolic --force ${shared_path}/uploads /home/uploadir/current/uploads",
-    ]:
-        require => [
-            Exec["/bin/rm -rf ${home_path}/current/uploads"],
-            File["${shared_path}/uploads"],
-        ],
-        user    => $user,
-        group   => $group,
-        unless  => "/usr/bin/test -L ${home_path}/current/uploads"
+      exec { "/bin/ln --symbolic --force ${shared_path}/uploads /home/uploadir/current/uploads":
+          require => [
+              Exec["/bin/rm -rf ${home_path}/current/uploads"],
+              File["${shared_path}/uploads"],
+          ],
+          user    => $user,
+          group   => $group,
+          unless  => "/usr/bin/test -L ${home_path}/current/uploads"
+      }
     }
 
     if (!defined(Package['libmagic-dev'])) {
