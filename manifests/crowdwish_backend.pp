@@ -14,7 +14,10 @@ class role::crowdwish_backend (
     $web_host          = undef,
 
     $ssh_key           = undef,
-    $ssh_known_hosts           = [],
+    $ssh_key_path      = undef,
+    $ssh_config        = '',
+    $ssh_known_hosts   = [],
+
     $environment       = undef,
 ) {
     include profile::base
@@ -50,7 +53,10 @@ class role::crowdwish_backend (
         database_password => $database_password,
 
         ssh_key           => $ssh_key,
-        ssh_known_hosts => $ssh_known_hosts,
+        ssh_key_path      => $ssh_key_path,
+        ssh_config        => $ssh_config,
+        ssh_known_hosts   => $ssh_known_hosts,
+
         environment       => $environment
     }
 

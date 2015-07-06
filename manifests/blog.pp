@@ -1,15 +1,17 @@
 class role::blog (
-    $user        = undef,
-    $owner       = undef,
-    $group       = undef,
+    $user            = undef,
+    $owner           = undef,
+    $group           = undef,
 
-    $repo_path   = undef,
-    $repo_source = undef,
+    $repo_path       = undef,
+    $repo_source     = undef,
 
-    $web_path    = undef,
-    $web_host    = undef,
+    $web_path        = undef,
+    $web_host        = undef,
 
-    $ssh_key     = undef,
+    $ssh_key         = undef,
+    $ssh_key_path    = undef,
+    $ssh_config      = '',
     $ssh_known_hosts = [],
 ) {
     include profile::base
@@ -19,17 +21,19 @@ class role::blog (
     $project_path = "/home/${user}/${repo_path}"
 
     project::ruby { 'blog':
-        user        => $user,
-        owner       => $owner,
-        group       => $group,
+        user            => $user,
+        owner           => $owner,
+        group           => $group,
 
-        repo_path   => $repo_path,
-        repo_source => $repo_source,
+        repo_path       => $repo_path,
+        repo_source     => $repo_source,
 
-        web_path    => $web_path,
-        web_host    => $web_host,
+        web_path        => $web_path,
+        web_host        => $web_host,
 
-        ssh_key     => $ssh_key,
+        ssh_key         => $ssh_key,
+        ssh_key_path    => $ssh_key_path,
+        ssh_config      => $ssh_config,
         ssh_known_hosts => $ssh_known_hosts,
     }
 

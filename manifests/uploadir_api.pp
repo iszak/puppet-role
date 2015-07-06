@@ -20,10 +20,10 @@ class role::uploadir_api (
 
     $environment       = undef
 ) {
-    include profile::base
-    include profile::apache
-    include profile::ruby
-    include profile::postgresql
+    include ::profile::base
+    include ::profile::apache
+    include ::profile::ruby
+    include ::profile::postgresql
 
     include apache::mod::xsendfile
 
