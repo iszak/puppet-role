@@ -1,18 +1,20 @@
 class role::1001_beers_website (
-    $user            = undef,
-    $owner           = undef,
-    $group           = undef,
+    $user,
+    $owner,
+    $group,
 
-    $repo_path       = undef,
-    $repo_source     = undef,
+    $repo_path,
+    $repo_source,
 
     $web_path        = undef,
-    $web_host        = undef,
+    $web_host,
 
     $ssh_key         = undef,
     $ssh_key_path    = undef,
     $ssh_config      = '',
     $ssh_known_hosts = [],
+
+    $environment,
 ) {
     include profile::base
     include profile::apache

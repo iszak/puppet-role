@@ -1,24 +1,24 @@
 class role::phoenix_server (
-    $user              = undef,
-    $owner             = undef,
-    $group             = undef,
+    $user,
+    $owner,
+    $group,
 
-    $database_name     = undef,
-    $database_username = undef,
-    $database_password = undef,
+    $database_name,
+    $database_username,
+    $database_password,
 
-    $repo_path         = undef,
-    $repo_source       = undef,
+    $repo_path,
+    $repo_source,
 
     $web_path          = undef,
-    $web_host          = undef,
+    $web_host,
 
     $ssh_key           = undef,
     $ssh_key_path      = undef,
     $ssh_config        = '',
     $ssh_known_hosts   = [],
 
-    $environment       = undef,
+    $environment,
 ) {
     include profile::base
     include profile::apache
