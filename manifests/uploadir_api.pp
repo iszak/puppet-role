@@ -10,15 +10,14 @@ class role::uploadir_api (
     $repo_path,
     $repo_source,
 
-    $web_path          = undef,
     $web_host,
+
+    $environment,
 
     $ssh_key           = undef,
     $ssh_key_path      = undef,
-    $ssh_config        = '',
-    $ssh_known_hosts   = [],
-
-    $environment,
+    $ssh_config        = undef,
+    $ssh_known_hosts   = undef,
 ) {
     include ::profile::base
     include ::profile::apache
@@ -52,9 +51,10 @@ class role::uploadir_api (
         repo_path         => $repo_path,
         repo_source       => $repo_source,
 
-        web_path          => $web_path,
+        web_path          => 'public/',
         web_host          => $web_host,
 
+        database_type     => 'postgresql',
         database_name     => $database_name,
         database_username => $database_username,
         database_password => $database_password,

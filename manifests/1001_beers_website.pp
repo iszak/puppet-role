@@ -6,15 +6,14 @@ class role::1001_beers_website (
     $repo_path,
     $repo_source,
 
-    $web_path        = undef,
     $web_host,
+
+    $environment,
 
     $ssh_key         = undef,
     $ssh_key_path    = undef,
-    $ssh_config      = '',
-    $ssh_known_hosts = [],
-
-    $environment,
+    $ssh_config      = undef,
+    $ssh_known_hosts = undef,
 ) {
     include profile::base
     include profile::apache
@@ -27,13 +26,14 @@ class role::1001_beers_website (
         repo_path       => $repo_path,
         repo_source     => $repo_source,
 
-        web_path        => $web_path,
         web_host        => $web_host,
 
         ssh_key         => $ssh_key,
         ssh_key_path    => $ssh_key_path,
         ssh_config      => $ssh_config,
         ssh_known_hosts => $ssh_known_hosts,
+
+        environment       => $environment,
     }
 
     if (!defined(Package['grunt-cli'])) {
