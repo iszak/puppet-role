@@ -1,5 +1,5 @@
 class role::1001_beers_api (
-    $user ,
+    $user,
     $owner,
     $group,
 
