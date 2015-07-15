@@ -10,30 +10,36 @@ class role::1001_beers_website (
 
     $environment,
 
-    $ssh_key         = undef,
-    $ssh_key_path    = undef,
-    $ssh_config      = undef,
-    $ssh_known_hosts = undef,
+    $ssh_private_keys     = {},
+    $ssh_private_key_path = undef,
+
+    $ssh_config           = '',
+    $ssh_known_hosts      = {},
+
+    $ssh_authorized_keys  = {},
 ) {
     include profile::base
     include profile::apache
 
     project::static { '1001_beers_website':
-        user            => $user,
-        owner           => $owner,
-        group           => $group,
+        user                 => $user,
+        owner                => $owner,
+        group                => $group,
 
-        repo_path       => $repo_path,
-        repo_source     => $repo_source,
+        repo_path            => $repo_path,
+        repo_source          => $repo_source,
 
-        web_host        => $web_host,
+        web_host             => $web_host,
 
-        ssh_key         => $ssh_key,
-        ssh_key_path    => $ssh_key_path,
-        ssh_config      => $ssh_config,
-        ssh_known_hosts => $ssh_known_hosts,
+        ssh_private_keys     => $ssh_private_keys,
+        ssh_private_key_path => $ssh_private_key_path,
 
-        environment       => $environment,
+        ssh_config           => $ssh_config,
+        ssh_known_hosts      => $ssh_known_hosts,
+
+        ssh_authorized_keys  => $ssh_authorized_keys,
+
+        environment          => $environment,
     }
 
     if (!defined(Package['grunt-cli'])) {

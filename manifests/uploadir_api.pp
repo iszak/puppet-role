@@ -14,10 +14,13 @@ class role::uploadir_api (
 
     $environment,
 
-    $ssh_key           = undef,
-    $ssh_key_path      = undef,
-    $ssh_config        = undef,
-    $ssh_known_hosts   = undef,
+    $ssh_private_keys     = {},
+    $ssh_private_key_path = undef,
+
+    $ssh_config           = '',
+    $ssh_known_hosts      = {},
+
+    $ssh_authorized_keys  = {},
 ) {
     include ::profile::base
     include ::profile::apache
@@ -44,30 +47,33 @@ class role::uploadir_api (
             Package['libsqlite3-dev'],
         ],
 
-        user              => $user,
-        owner             => $owner,
-        group             => $group,
+        user                 => $user,
+        owner                => $owner,
+        group                => $group,
 
-        repo_path         => $repo_path,
-        repo_source       => $repo_source,
+        repo_path            => $repo_path,
+        repo_source          => $repo_source,
 
-        web_path          => 'public/',
-        web_host          => $web_host,
+        web_path             => 'public/',
+        web_host             => $web_host,
 
-        database_type     => 'postgresql',
-        database_name     => $database_name,
-        database_username => $database_username,
-        database_password => $database_password,
+        database_type        => 'postgresql',
+        database_name        => $database_name,
+        database_username    => $database_username,
+        database_password    => $database_password,
 
-        ssh_key           => $ssh_key,
-        ssh_key_path      => $ssh_key_path,
-        ssh_config        => $ssh_config,
-        ssh_known_hosts   => $ssh_known_hosts,
+        ssh_private_keys     => $ssh_private_keys,
+        ssh_private_key_path => $ssh_private_key_path,
 
-        environment       => $environment,
-        capistrano        => $capistrano,
+        ssh_config           => $ssh_config,
+        ssh_known_hosts      => $ssh_known_hosts,
 
-        custom_fragment   => "
+        ssh_authorized_keys  => $ssh_authorized_keys,
+
+        environment          => $environment,
+        capistrano           => $capistrano,
+
+        custom_fragment      => "
 XSendFile On\n
 XSendFilePath ${shared_path}/uploads/\n
 XSendFilePath ${shared_path}/tmp/downloads/\n
