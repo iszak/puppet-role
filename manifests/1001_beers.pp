@@ -12,6 +12,7 @@ class role::1001_beers (
     $web_host,
 
     $environment,
+    $secrets,
 
     $ssh_private_keys     = {},
     $ssh_private_key_path = undef,
@@ -44,6 +45,7 @@ class role::1001_beers (
     ssh_known_hosts      => $ssh_known_hosts,
 
     ssh_authorized_keys  => $ssh_authorized_keys,
+    secrets              => $secrets,
   }
 
 

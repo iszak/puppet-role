@@ -13,6 +13,7 @@ class role::1001_beers_api (
     $web_host,
 
     $environment,
+    $secrets,
 
     $ssh_private_keys     = {},
     $ssh_private_key_path = undef,
@@ -64,6 +65,7 @@ class role::1001_beers_api (
 
         environment          => $environment,
         capistrano           => $capistrano,
+        secrets              => $secrets,
     }
 
     if (!defined(Package['libsqlite3-dev'])) {
