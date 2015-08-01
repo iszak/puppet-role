@@ -34,7 +34,7 @@ class role::uploadir_api (
 
     if ($environment == 'production') {
         $capistrano = true
-        $shared_path = "${home_path}/shared"
+        $shared_path = "${project_path}/shared"
     } else {
         $capistrano = false
         $shared_path = $project_path
@@ -81,9 +81,9 @@ XSendFilePath ${shared_path}/tmp/downloads/\n
     }
 
     if ($capistrano == true) {
-      exec { "/bin/rm -rf ${home_path}/current/uploads":
+      exec { "/bin/rm -rf ${project_path}/current/uploads":
           require => Project::Rails[$title],
-          unless  => "/usr/bin/test -L ${home_path}/current/uploads"
+          unless  => "/usr/bin/test -L ${project_path}/current/uploads"
       }
 
       file { [
@@ -96,14 +96,14 @@ XSendFilePath ${shared_path}/tmp/downloads/\n
           group   => $group,
       }
 
-      exec { "/bin/ln --symbolic --force ${shared_path}/uploads /home/uploadir/current/uploads":
+      exec { "/bin/ln --symbolic --force ${shared_path}/uploads ${project_path}/current/uploads":
           require => [
-              Exec["/bin/rm -rf ${home_path}/current/uploads"],
+              Exec["/bin/rm -rf ${project_path}/current/uploads"],
               File["${shared_path}/uploads"],
           ],
           user    => $user,
           group   => $group,
-          unless  => "/usr/bin/test -L ${home_path}/current/uploads"
+          unless  => "/usr/bin/test -L ${project_path}/current/uploads"
       }
     }
 
