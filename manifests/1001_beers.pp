@@ -31,7 +31,7 @@ class role::1001_beers (
     database_username    => $database_username,
     database_password    => $database_password,
 
-    repo_path            => "${repo_path}/api",
+    repo_path            => regsubst("${repo_path}/api", '^/', ''),
     repo_source          => "https://github.com/iszak/1001-beers-api.git",
 
     web_host             => "api.${web_host}",
@@ -54,7 +54,7 @@ class role::1001_beers (
     owner                => $owner,
     group                => $group,
 
-    repo_path            => "${repo_path}/website",
+    repo_path            => regsubst("${repo_path}/website", '^/', ''),
     repo_source          => "https://github.com/iszak/1001-beers-website.git",
 
     web_host             => $web_host,
