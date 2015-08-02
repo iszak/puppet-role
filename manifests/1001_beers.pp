@@ -14,13 +14,16 @@ class role::1001_beers (
     $environment,
     $secrets,
 
-    $ssh_private_keys     = {},
-    $ssh_private_key_path = undef,
+    $api_ssh_private_keys     = {},
+    $api_ssh_private_key_path = undef,
 
-    $ssh_config           = '',
-    $ssh_known_hosts      = {},
+    $website_ssh_private_keys     = {},
+    $website_ssh_private_key_path = undef,
 
-    $ssh_authorized_keys  = {},
+    $ssh_config                   = '',
+    $ssh_known_hosts              = {},
+
+    $ssh_authorized_keys         = {},
 ) {
   class { '1001_beers_api':
     user                 => $user,
@@ -38,8 +41,8 @@ class role::1001_beers (
 
     environment          => $environment,
 
-    ssh_private_keys     => $ssh_private_keys,
-    ssh_private_key_path => $ssh_private_key_path,
+    ssh_private_keys     => $api_ssh_private_keys,
+    ssh_private_key_path => $api_ssh_private_key_path,
 
     ssh_config           => $ssh_config,
     ssh_known_hosts      => $ssh_known_hosts,
@@ -61,8 +64,8 @@ class role::1001_beers (
 
     environment          => $environment,
 
-    ssh_private_keys     => $ssh_private_keys,
-    ssh_private_key_path => $ssh_private_key_path,
+    ssh_private_keys     => $website_ssh_private_keys,
+    ssh_private_key_path => $website_ssh_private_key_path,
 
     ssh_config           => $ssh_config,
     ssh_known_hosts      => $ssh_known_hosts,
