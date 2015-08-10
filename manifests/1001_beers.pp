@@ -58,7 +58,7 @@ class role::1001_beers (
     group                => $group,
 
     repo_path            => regsubst("${repo_path}/website", '^/', ''),
-    repo_source          => "https://github.com/iszak/1001-beers-website.git",
+    repo_source          => 'https://github.com/iszak/1001-beers-website.git',
 
     web_host             => $web_host,
 

@@ -43,7 +43,7 @@ class role::uploadir (
   }
 
   project::rails { $title:
-    require           => [
+    require              => [
       Class[postgresql::lib::devel],
       Package['libmagic-dev'],
       Package['libsqlite3-dev'],

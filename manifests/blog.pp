@@ -54,12 +54,12 @@ class role::blog (
   }
 
   ruby::rake { 'blog_generate':
-    require => [
+    require   => [
       Project::Ruby['blog']
     ],
     task      => 'site:generate',
     rails_env => 'production',
-    bundle    => 'true',
+    bundle    => true,
     user      => $user,
     group     => $group,
     cwd       => $project_path,

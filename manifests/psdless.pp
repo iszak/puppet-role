@@ -54,7 +54,7 @@ class role::psdless (
   if (!defined(Package['grunt-cli'])) {
     package { 'grunt-cli':
       ensure   => present,
-      require   => [
+      require  => [
         Class['::profile::node'],
       ],
       provider => npm
