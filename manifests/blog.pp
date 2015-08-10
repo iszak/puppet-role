@@ -65,4 +65,11 @@ class role::blog (
     cwd       => $project_path,
     onlyif    => "/usr/bin/test $(find ${project_path} -not -iwholename '*/vendor*' -not -iwholename '*/.git*' -not -iwholename '*/_site*' -mtime -1 -print -quit)"
   }
+
+  package { [
+    'graphicsmagick'
+  ]:
+    ensure => present,
+    before => Project::Ruby['blog']
+  }
 }
