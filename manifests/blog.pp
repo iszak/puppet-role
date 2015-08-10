@@ -1,61 +1,68 @@
 class role::blog (
-    $user,
-    $owner,
-    $group,
+  $user,
+  $owner,
+  $group,
 
-    $repo_path,
-    $repo_source,
+  $repo_path,
+  $repo_source,
 
-    $web_host,
+  $web_host,
 
-    $environment,
+  $environment,
 
-    $ssh_private_keys     = {},
-    $ssh_private_key_path = undef,
+  $ssh_private_keys     = {},
+  $ssh_private_key_path = undef,
 
-    $ssh_config           = '',
-    $ssh_known_hosts      = {},
+  $ssh_config           = '',
+  $ssh_known_hosts      = {},
 
-    $ssh_authorized_keys  = {},
+  $ssh_authorized_keys  = {},
 ) {
-    include profile::base
-    include profile::apache
-    include profile::ruby
+  include profile::base
+  include profile::apache
+  include profile::ruby
 
-    $project_path = "/home/${user}/${repo_path}"
+  $project_path = "/home/${user}/${repo_path}"
 
-    project::ruby { 'blog':
-        user                 => $user,
-        owner                => $owner,
-        group                => $group,
+  if ($environment == 'production') {
+    $repo_revision = 'production'
+  } else {
+    $repo_revision = 'master'
+  }
 
-        repo_path            => $repo_path,
-        repo_source          => $repo_source,
+  project::ruby { 'blog':
+    user                 => $user,
+    owner                => $owner,
+    group                => $group,
 
-        web_path             => '_site/',
-        web_host             => $web_host,
+    repo_path            => $repo_path,
+    repo_source          => $repo_source,
+    repo_revision        => $repo_revision,
 
-        ssh_private_keys     => $ssh_private_keys,
-        ssh_private_key_path => $ssh_private_key_path,
+    web_path             => '_site/',
+    web_host             => $web_host,
 
-        ssh_config           => $ssh_config,
-        ssh_known_hosts      => $ssh_known_hosts,
+    ssh_private_keys     => $ssh_private_keys,
+    ssh_private_key_path => $ssh_private_key_path,
 
-        ssh_authorized_keys  => $ssh_authorized_keys,
+    ssh_config           => $ssh_config,
+    ssh_known_hosts      => $ssh_known_hosts,
 
-        environment          => $environment,
-    }
+    ssh_authorized_keys  => $ssh_authorized_keys,
 
-    ruby::rake { 'blog_generate':
-        require => [
-            Project::Ruby['blog']
-        ],
-        task      => 'site:generate',
-        rails_env => 'production',
-        bundle    => 'true',
-        user      => $user,
-        group     => $group,
-        cwd       => $project_path,
-        onlyif    => "/usr/bin/test $(find ${project_path} -not -iwholename '*/vendor*' -not -iwholename '*/.git*' -not -iwholename '*/_site*' -mtime -1 -print -quit)"
-    }
+    environment          => $environment,
+  }
+
+  ruby::rake { 'blog_generate':
+    require => [
+      Project::Ruby['blog']
+    ],
+    task      => 'site:generate',
+    rails_env => 'production',
+    bundle    => 'true',
+    user      => $user,
+    group     => $group,
+    cwd       => $project_path,
+    onlyif    => "/usr/bin/test $(find ${project_path} -not -iwholename '*/vendor*' -not -iwholename '*/.git*' -not -iwholename '*/_site*' -mtime -1 -print -quit)"
+  }
 }

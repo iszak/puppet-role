@@ -1,110 +1,75 @@
 class role::crowdwish (
-    $user,
-    $owner,
-    $group,
+  $user,
+  $owner,
+  $group,
 
-    $database_name,
-    $database_username,
-    $database_password,
+  $database_name,
+  $database_username,
+  $database_password,
 
-    $repo_path,
+  $repo_path,
 
-    $web_host,
+  $web_host,
 
-    $environment,
+  $environment,
 
-    $backend_ssh_private_keys     = {},
-    $backend_ssh_private_key_path = undef,
+  $backend_ssh_private_keys     = {},
+  $backend_ssh_private_key_path = undef,
 
-    $client_ssh_private_keys     = {},
-    $client_ssh_private_key_path = undef,
+  $client_ssh_private_keys     = {},
+  $client_ssh_private_key_path = undef,
 
-    $ssh_config                  = '',
-    $ssh_known_hosts             = {},
+  $ssh_config                  = '',
+  $ssh_known_hosts             = {},
 
-    $ssh_authorized_keys         = {},
+  $ssh_authorized_keys         = {},
 ) {
-    $home_path    = "/home/${user}"
-    $project_path = "${home_path}/${repo_path}"
+  $home_path    = "/home/${user}"
+  $project_path = "${home_path}/${repo_path}"
 
-    include ::profile::base
-    include ::profile::apache
-    include ::profile::php
-    include ::profile::postgresql
+  class { 'role::crowdwish_backend':
+    user                 => $user,
+    owner                => $owner,
+    group                => $group,
 
-    class { 'apache::mod::rewrite':
-        require => Class['profile::php']
-    }
+    repo_path            => regsubst("${repo_path}/backend", '^/', ''),
+    repo_source          => 'git@git.kdigital.net:crowdwish/backend.git',
 
-    project::zf2 { 'crowdwish_backend':
-        require           => [
-            Package['php5-curl'],
-            Package['php5-intl'],
-            Package['php5-pgsql']
-        ],
+    web_host             => "api.${web_host}",
 
-        user                 => $user,
-        owner                => $owner,
-        group                => $group,
+    database_name        => $database_name,
+    database_username    => $database_username,
+    database_password    => $database_password,
 
-        repo_path            => regsubst("${repo_path}/backend", '^/', ''),
-        repo_source          => 'git@git.kdigital.net:crowdwish/backend.git',
+    ssh_private_keys     => $backend_ssh_private_keys,
+    ssh_private_key_path => $backend_ssh_private_key_path,
 
-        web_path             => 'web/public/',
-        web_host             => "api.${web_host}",
+    ssh_config           => $ssh_config,
+    ssh_known_hosts      => $ssh_known_hosts,
 
-        composer_path        => 'web',
+    ssh_authorized_keys  => $ssh_authorized_keys,
 
-        database_type        => 'postgresql',
-        database_name        => $database_name,
-        database_username    => $database_username,
-        database_password    => $database_password,
+    environment          => $environment
+  }
 
-        ssh_private_keys     => $backend_ssh_private_keys,
-        ssh_private_key_path => $backend_ssh_private_key_path,
+  class { 'role::crowdwish_client':
+    user                 => $user,
+    owner                => $owner,
+    group                => $group,
 
-        ssh_config           => $ssh_config,
-        ssh_known_hosts      => $ssh_known_hosts,
+    repo_path            => regsubst("${repo_path}/client", '^/', ''),
+    repo_source          => 'git@git.kdigital.net:crowdwish/client.git',
 
-        ssh_authorized_keys  => $ssh_authorized_keys,
+    web_host             => $web_host,
 
-        environment          => $environment
-    }
+    ssh_private_keys     => $client_ssh_private_keys,
+    ssh_private_key_path => $client_ssh_private_key_path,
 
-    exec { 'crowdwish_backend_domain':
-        require => Project::Zf2['crowdwish_backend'],
-        command => "/bin/sed -i 's/example\\.com/${web_host}/' *local.php",
-        cwd     => "${project_path}/web/config/autoload",
-        onlyif  => '/bin/grep example.com *local.php'
-    }
+    ssh_config           => $ssh_config,
+    ssh_known_hosts      => $ssh_known_hosts,
 
-    package { [
-        'php5-curl',
-        'php5-intl',
-        'php5-pgsql'
-    ]:
-        ensure => latest
-    }
+    ssh_authorized_keys  => $ssh_authorized_keys,
 
-
-    project::static { 'crowdwish_client':
-        user                 => $user,
-        owner                => $owner,
-        group                => $group,
-
-        repo_path            => regsubst("${repo_path}/client", '^/', ''),
-        repo_source          => 'git@git.kdigital.net:crowdwish/client.git',
-
-        web_host             => $web_host,
-
-        ssh_private_keys     => $client_ssh_private_keys,
-        ssh_private_key_path => $client_ssh_private_key_path,
-
-        ssh_config           => $ssh_config,
-        ssh_known_hosts      => $ssh_known_hosts,
-
-        ssh_authorized_keys  => $ssh_authorized_keys,
-
-        environment          => $environment,
-    }
+    environment          => $environment,
+  }
 }

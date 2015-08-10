@@ -1,66 +1,73 @@
 class role::phoenix_client (
-    $user,
-    $owner,
-    $group,
+  $user,
+  $owner,
+  $group,
 
-    $repo_path,
-    $repo_source,
+  $repo_path,
+  $repo_source,
 
-    $web_host,
+  $web_host,
 
-    $environment,
+  $environment,
 
-    $ssh_private_keys     = {},
-    $ssh_private_key_path = undef,
+  $ssh_private_keys     = {},
+  $ssh_private_key_path = undef,
 
-    $ssh_config           = '',
-    $ssh_known_hosts      = {},
+  $ssh_config           = '',
+  $ssh_known_hosts      = {},
 
-    $ssh_authorized_keys  = {},
+  $ssh_authorized_keys  = {},
 ) {
-    include profile::base
-    include profile::apache
+  include profile::base
+  include profile::apache
 
-    project::static { 'phoenix_client':
-        user                 => $user,
-        owner                => $owner,
-        group                => $group,
+  if ($environment == 'production') {
+    $repo_revision = 'production'
+  } else {
+    $repo_revision = 'master'
+  }
 
-        repo_path            => $repo_path,
-        repo_source          => $repo_source,
+  project::static { 'phoenix_client':
+    user                 => $user,
+    owner                => $owner,
+    group                => $group,
 
-        web_host             => $web_host,
+    repo_path            => $repo_path,
+    repo_source          => $repo_source,
+    repo_revision        => $repo_revision,
 
-        ssh_private_keys     => $ssh_private_keys,
-        ssh_private_key_path => $ssh_private_key_path,
+    web_host             => $web_host,
 
-        ssh_config           => $ssh_config,
-        ssh_known_hosts      => $ssh_known_hosts,
+    ssh_private_keys     => $ssh_private_keys,
+    ssh_private_key_path => $ssh_private_key_path,
 
-        ssh_authorized_keys  => $ssh_authorized_keys,
+    ssh_config           => $ssh_config,
+    ssh_known_hosts      => $ssh_known_hosts,
 
-        npm_install          => true,
+    ssh_authorized_keys  => $ssh_authorized_keys,
 
-        environment          => $environment,
+    npm_install          => true,
+
+    environment          => $environment,
+  }
+
+
+  if (!defined(Package['grunt-cli'])) {
+    package { 'grunt-cli':
+      ensure   => present,
+      require  => [
+          Class[nodejs],
+      ],
+      provider => npm
     }
+  }
 
 
-    if (!defined(Package['grunt-cli'])) {
-        package { 'grunt-cli':
-            ensure   => present,
-            require  => [
-                Class[nodejs],
-            ],
-            provider => npm
-        }
+  if (!defined(Package['compass'])) {
+    package { 'compass':
+      ensure   => present,
+      require  => Class[ruby::dev],
+      provider => gem
     }
-
-
-    if (!defined(Package['compass'])) {
-        package { 'compass':
-            ensure   => present,
-            require  => Class[ruby::dev],
-            provider => gem
-        }
-    }
+  }
 }

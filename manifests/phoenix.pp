@@ -1,95 +1,72 @@
 class role::phoenix (
-    $user,
-    $owner,
-    $group,
+  $user,
+  $owner,
+  $group,
 
-    $database_name,
-    $database_username,
-    $database_password,
+  $database_name,
+  $database_username,
+  $database_password,
 
-    $repo_path,
+  $repo_path,
 
-    $web_host,
+  $web_host,
 
-    $environment,
+  $environment,
 
-    $client_ssh_private_keys     = {},
-    $client_ssh_private_key_path = undef,
+  $client_ssh_private_keys     = {},
+  $client_ssh_private_key_path = undef,
 
-    $server_ssh_private_keys     = {},
-    $server_ssh_private_key_path = undef,
+  $server_ssh_private_keys     = {},
+  $server_ssh_private_key_path = undef,
 
-    $ssh_config                  = '',
-    $ssh_known_hosts             = {},
+  $ssh_config                  = '',
+  $ssh_known_hosts             = {},
 
-    $ssh_authorized_keys         = {},
+  $ssh_authorized_keys         = {},
 ) {
-    include profile::base
-    include profile::apache
-    include profile::node
+  class { 'role::phoenix_server':
+    user                 => $user,
+    owner                => $owner,
+    group                => $group,
 
-    project::node { 'phoenix_server':
-        user                 => $user,
-        owner                => $owner,
-        group                => $group,
+    repo_path            => "${repo_path}/server",
+    repo_source          => 'git@bitbucket.org:iszak/phoenix-server.git',
 
-        repo_path            => "${repo_path}/server",
-        repo_source          => 'git@bitbucket.org:iszak/phoenix-server.git',
+    web_host             => "api.${web_host}",
 
-        web_path             => 'public/',
-        web_host             => "api.${web_host}",
+    database_name        => $database_name,
+    database_username    => $database_username,
+    database_password    => $database_password,
 
-        ssh_private_keys     => $server_ssh_private_keys,
-        ssh_private_key_path => $server_ssh_private_key_path,
+    ssh_private_keys     => $server_ssh_private_keys,
+    ssh_private_key_path => $server_ssh_private_key_path,
 
-        ssh_config           => $ssh_config,
-        ssh_known_hosts      => $ssh_known_hosts,
+    ssh_config           => $ssh_config,
+    ssh_known_hosts      => $ssh_known_hosts,
 
-        ssh_authorized_keys  => $ssh_authorized_keys,
+    ssh_authorized_keys  => $ssh_authorized_keys,
 
-        environment          => $environment
-    }
+    environment          => $environment
+  }
 
-    project::static { 'phoenix_client':
-        user                 => $user,
-        owner                => $owner,
-        group                => $group,
+  class { 'role::phoenix_client':
+    user                 => $user,
+    owner                => $owner,
+    group                => $group,
 
-        repo_path            => "${repo_path}/client",
-        repo_source          => 'git@bitbucket.org:iszak/phoenix-client.git',
+    repo_path            => "${repo_path}/client",
+    repo_source          => 'git@bitbucket.org:iszak/phoenix-client.git',
 
-        web_host             => $web_host,
+    web_host             => $web_host,
 
-        ssh_private_keys     => $client_ssh_private_keys,
-        ssh_private_key_path => $client_ssh_private_key_path,
+    ssh_private_keys     => $client_ssh_private_keys,
+    ssh_private_key_path => $client_ssh_private_key_path,
 
-        ssh_config           => $ssh_config,
-        ssh_known_hosts      => $ssh_known_hosts,
+    ssh_config           => $ssh_config,
+    ssh_known_hosts      => $ssh_known_hosts,
 
-        ssh_authorized_keys  => $ssh_authorized_keys,
+    ssh_authorized_keys  => $ssh_authorized_keys,
 
-        npm_install          => true,
-
-        environment          => $environment,
-    }
-
-
-    if (!defined(Package['grunt-cli'])) {
-        package { 'grunt-cli':
-            ensure   => present,
-            require  => [
-                Class[nodejs],
-            ],
-            provider => npm
-        }
-    }
-
-
-    if (!defined(Package['compass'])) {
-        package { 'compass':
-            ensure   => present,
-            require  => Class[ruby::dev],
-            provider => gem
-        }
-    }
+    environment          => $environment,
+  }
 }

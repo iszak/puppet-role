@@ -1,86 +1,93 @@
 class role::crowdwish_backend (
-    $user,
-    $owner,
-    $group,
+  $user,
+  $owner,
+  $group,
 
-    $database_name,
-    $database_username,
-    $database_password,
+  $database_name,
+  $database_username,
+  $database_password,
 
-    $repo_path,
-    $repo_source,
+  $repo_path,
+  $repo_source,
 
-    $web_host,
+  $web_host,
 
-    $environment,
+  $environment,
 
-    $ssh_private_keys     = {},
-    $ssh_private_key_path = undef,
+  $ssh_private_keys     = {},
+  $ssh_private_key_path = undef,
 
-    $ssh_config           = '',
-    $ssh_known_hosts      = {},
+  $ssh_config           = '',
+  $ssh_known_hosts      = {},
 
-    $ssh_authorized_keys  = {},
+  $ssh_authorized_keys  = {},
 ) {
-    $home_path    = "/home/${user}"
-    $project_path = "${home_path}/${repo_path}"
+  include ::profile::base
+  include ::profile::apache
+  include ::profile::php
+  include ::profile::postgresql
 
-    include ::profile::base
-    include ::profile::apache
-    include ::profile::php
-    include ::profile::postgresql
+  $home_path    = "/home/${user}"
+  $project_path = "${home_path}/${repo_path}"
 
-    class { 'apache::mod::rewrite':
-        require => Class['profile::php']
-    }
+  if ($environment == 'production') {
+    $repo_revision = 'production'
+  } else {
+    $repo_revision = 'master'
+  }
 
-    project::zf2 { 'crowdwish_backend':
-        require           => [
-            Package['php5-curl'],
-            Package['php5-intl'],
-            Package['php5-pgsql']
-        ],
+  class { 'apache::mod::rewrite':
+    require => Class['profile::php']
+  }
 
-        user                 => $user,
-        owner                => $owner,
-        group                => $group,
+  project::zf2 { 'crowdwish_backend':
+    require              => [
+      Package['php5-curl'],
+      Package['php5-intl'],
+      Package['php5-pgsql']
+    ],
 
-        repo_path            => $repo_path,
-        repo_source          => $repo_source,
+    user                 => $user,
+    owner                => $owner,
+    group                => $group,
 
-        web_path             => 'web/public/',
-        web_host             => $web_host,
+    repo_path            => $repo_path,
+    repo_source          => $repo_source,
+    repo_revision        => $repo_revision,
 
-        composer_path        => 'web',
+    web_path             => 'web/public/',
+    web_host             => $web_host,
 
-        database_type        => 'postgresql',
-        database_name        => $database_name,
-        database_username    => $database_username,
-        database_password    => $database_password,
+    composer_path        => 'web',
 
-        ssh_private_keys     => $ssh_private_keys,
-        ssh_private_key_path => $ssh_private_key_path,
+    database_type        => 'postgresql',
+    database_name        => $database_name,
+    database_username    => $database_username,
+    database_password    => $database_password,
 
-        ssh_config           => $ssh_config,
-        ssh_known_hosts      => $ssh_known_hosts,
+    ssh_private_keys     => $ssh_private_keys,
+    ssh_private_key_path => $ssh_private_key_path,
 
-        ssh_authorized_keys  => $ssh_authorized_keys,
+    ssh_config           => $ssh_config,
+    ssh_known_hosts      => $ssh_known_hosts,
 
-        environment          => $environment
-    }
+    ssh_authorized_keys  => $ssh_authorized_keys,
 
-    exec { 'crowdwish_backend_domain':
-        require => Project::Zf2['crowdwish_backend'],
-        command => "/bin/sed -i 's/example\\.com/${web_host}/' *local.php",
-        cwd     => "${project_path}/web/config/autoload",
-        onlyif  => '/bin/grep example.com *local.php'
-    }
+    environment          => $environment
+  }
 
-    package { [
-        'php5-curl',
-        'php5-intl',
-        'php5-pgsql'
-    ]:
-        ensure => latest
-    }
+  exec { 'crowdwish_backend_domain':
+    require => Project::Zf2['crowdwish_backend'],
+    command => "/bin/sed -i 's/example\\.com/${web_host}/' *local.php",
+    cwd     => "${project_path}/web/config/autoload",
+    onlyif  => '/bin/grep example.com *local.php'
+  }
+
+  package { [
+    'php5-curl',
+    'php5-intl',
+    'php5-pgsql'
+  ]:
+    ensure => latest
+  }
 }

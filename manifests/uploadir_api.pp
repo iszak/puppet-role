@@ -9,6 +9,7 @@ class role::uploadir_api (
 
     $repo_path,
     $repo_source,
+    $repo_revision,
 
     $web_host,
 
@@ -33,9 +34,11 @@ class role::uploadir_api (
     $project_path = "${home_path}/${repo_path}"
 
     if ($environment == 'production') {
+        $repo_revision = 'production'
         $capistrano = true
         $shared_path = "${project_path}/shared"
     } else {
+        $repo_revision = 'master'
         $capistrano = false
         $shared_path = $project_path
     }
@@ -53,6 +56,7 @@ class role::uploadir_api (
 
         repo_path            => $repo_path,
         repo_source          => $repo_source,
+        repo_revision        => $repo_revision,
 
         web_path             => 'public/',
         web_host             => $web_host,
