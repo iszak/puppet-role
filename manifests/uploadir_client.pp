@@ -1,11 +1,7 @@
-class role::phoenix_server (
+class role::uploadir_client (
   $user,
   $owner,
   $group,
-
-  $database_name,
-  $database_username,
-  $database_password,
 
   $repo_path,
 
@@ -23,8 +19,6 @@ class role::phoenix_server (
 ) {
   include profile::base
   include profile::apache
-  include profile::node
-  include profile::postgresql
 
   if ($environment == 'production') {
     $repo_revision = 'production'
@@ -32,16 +26,15 @@ class role::phoenix_server (
     $repo_revision = 'master'
   }
 
-  project::node { 'phoenix_server':
+  project::static { 'uploadir_client':
     user                 => $user,
     owner                => $owner,
     group                => $group,
 
     repo_path            => $repo_path,
-    repo_source          => 'git@bitbucket.org:iszak/phoenix-server.git',
+    repo_source          => 'git@bitbucket.org:iszak/uploadir-client.git',
     repo_revision        => $repo_revision,
 
-    web_path             => 'public/',
     web_host             => $web_host,
 
     ssh_private_keys     => $ssh_private_keys,
@@ -52,6 +45,28 @@ class role::phoenix_server (
 
     ssh_authorized_keys  => $ssh_authorized_keys,
 
-    environment          => $environment
+    npm_install          => true,
+
+    environment          => $environment,
+  }
+
+
+  if (!defined(Package['grunt-cli'])) {
+    package { 'grunt-cli':
+      ensure   => present,
+      require  => [
+          Class[nodejs],
+      ],
+      provider => npm
+    }
+  }
+
+
+  if (!defined(Package['compass'])) {
+    package { 'compass':
+      ensure   => present,
+      require  => Class[ruby::dev],
+      provider => gem
+    }
   }
 }

@@ -1,27 +1,26 @@
 class role::uploadir_api (
-    $user,
-    $owner,
-    $group,
+  $user,
+  $owner,
+  $group,
 
-    $database_name,
-    $database_username,
-    $database_password,
+  $database_name,
+  $database_username,
+  $database_password,
 
-    $repo_path,
-    $repo_source,
-    $repo_revision,
+  $repo_path,
 
-    $web_host,
+  $web_host,
 
-    $environment,
+  $environment,
+  $secrets,
 
-    $ssh_private_keys     = {},
-    $ssh_private_key_path = undef,
+  $ssh_private_keys     = {},
+  $ssh_private_key_path = undef,
 
-    $ssh_config           = '',
-    $ssh_known_hosts      = {},
+  $ssh_config           = '',
+  $ssh_known_hosts      = {},
 
-    $ssh_authorized_keys  = {},
+  $ssh_authorized_keys  = {},
 ) {
   include ::profile::base
   include ::profile::apache
@@ -55,7 +54,7 @@ class role::uploadir_api (
     group                => $group,
 
     repo_path            => $repo_path,
-    repo_source          => $repo_source,
+    repo_source          => 'git@bitbucket.org:iszak/uploadir-api.git',
     repo_revision        => $repo_revision,
 
     web_path             => 'public/',
@@ -76,6 +75,7 @@ class role::uploadir_api (
 
     environment          => $environment,
     capistrano           => $capistrano,
+    secrets              => $secrets,
 
     custom_fragment      => "
 XSendFile On\n

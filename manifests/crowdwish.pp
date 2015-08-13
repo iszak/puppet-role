@@ -33,7 +33,6 @@ class role::crowdwish (
     group                => $group,
 
     repo_path            => regsubst("${repo_path}/backend", '^/', ''),
-    repo_source          => 'git@git.kdigital.net:crowdwish/backend.git',
 
     web_host             => "api.${web_host}",
 
@@ -58,7 +57,6 @@ class role::crowdwish (
     group                => $group,
 
     repo_path            => regsubst("${repo_path}/client", '^/', ''),
-    repo_source          => 'git@git.kdigital.net:crowdwish/client.git',
 
     web_host             => $web_host,
 

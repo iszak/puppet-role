@@ -8,7 +8,6 @@ class role::1001_beers_api (
   $database_password,
 
   $repo_path,
-  $repo_source,
 
   $web_host,
 
@@ -47,7 +46,7 @@ class role::1001_beers_api (
     group                => $group,
 
     repo_path            => $repo_path,
-    repo_source          => $repo_source,
+    repo_source          => 'https://github.com/iszak/1001-beers-api.git',
     repo_revision        => $repo_revision,
 
     web_path             => 'public/',

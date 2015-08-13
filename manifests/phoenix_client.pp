@@ -4,7 +4,6 @@ class role::phoenix_client (
   $group,
 
   $repo_path,
-  $repo_source,
 
   $web_host,
 
@@ -33,7 +32,7 @@ class role::phoenix_client (
     group                => $group,
 
     repo_path            => $repo_path,
-    repo_source          => $repo_source,
+    repo_source          => 'git@bitbucket.org:iszak/phoenix-client.git',
     repo_revision        => $repo_revision,
 
     web_host             => $web_host,

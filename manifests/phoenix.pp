@@ -30,7 +30,6 @@ class role::phoenix (
     group                => $group,
 
     repo_path            => "${repo_path}/server",
-    repo_source          => 'git@bitbucket.org:iszak/phoenix-server.git',
 
     web_host             => "api.${web_host}",
 
@@ -55,7 +54,6 @@ class role::phoenix (
     group                => $group,
 
     repo_path            => "${repo_path}/client",
-    repo_source          => 'git@bitbucket.org:iszak/phoenix-client.git',
 
     web_host             => $web_host,
 

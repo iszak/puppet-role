@@ -8,7 +8,6 @@ class role::crowdwish_backend (
   $database_password,
 
   $repo_path,
-  $repo_source,
 
   $web_host,
 
@@ -52,7 +51,7 @@ class role::crowdwish_backend (
     group                => $group,
 
     repo_path            => $repo_path,
-    repo_source          => $repo_source,
+    repo_source          => 'git@git.kdigital.net:crowdwish/backend.git',
     repo_revision        => $repo_revision,
 
     web_path             => 'web/public/',

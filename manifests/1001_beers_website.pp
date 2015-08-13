@@ -4,7 +4,6 @@ class role::1001_beers_website (
     $group,
 
     $repo_path,
-    $repo_source,
 
     $web_host,
 
@@ -33,7 +32,7 @@ class role::1001_beers_website (
     group                => $group,
 
     repo_path            => $repo_path,
-    repo_source          => $repo_source,
+    repo_source          => 'https://github.com/iszak/1001-beers-website.git',
     repo_revision        => $repo_revision,
 
     web_host             => $web_host,
