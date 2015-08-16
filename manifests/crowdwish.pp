@@ -63,9 +63,6 @@ class role::crowdwish (
     ssh_private_keys     => $client_ssh_private_keys,
     ssh_private_key_path => $client_ssh_private_key_path,
 
-    ssh_config           => $ssh_config,
-    ssh_known_hosts      => $ssh_known_hosts,
-
     ssh_authorized_keys  => $ssh_authorized_keys,
 
     environment          => $environment,
