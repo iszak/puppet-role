@@ -31,12 +31,6 @@ class role::uploadir (
   validate_bool($monitor)
   validate_string($monitor_backend)
 
-  if $monitor {
-    class { '::profile::monitor::agent':
-      backend => $monitor_backend,
-    }
-  }
-
   class { 'uploadir_api':
     user                 => $user,
     owner                => $owner,
@@ -47,10 +41,13 @@ class role::uploadir (
     database_password    => $database_password,
 
     repo_path            => regsubst("${repo_path}/api", '^/', ''),
- 
+
     web_host             => "api.${web_host}",
 
     environment          => $environment,
+
+    monitor              => $monitor,
+    monitor_backend      => $monitor_backend,
 
     ssh_private_keys     => $api_ssh_private_keys,
     ssh_private_key_path => $api_ssh_private_key_path,

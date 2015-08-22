@@ -14,6 +14,9 @@ class role::uploadir_api (
   $environment,
   $secrets,
 
+  $monitor,
+  $monitor_backend = undef,
+
   $ssh_private_keys     = {},
   $ssh_private_key_path = undef,
 
@@ -22,6 +25,15 @@ class role::uploadir_api (
 
   $ssh_authorized_keys  = {},
 ) {
+  validate_bool($monitor)
+  validate_string($monitor_backend)
+
+  if $monitor {
+    class { '::profile::monitor::agent':
+      backend => $monitor_backend,
+    }
+  }
+
   include ::profile::base
   include ::profile::apache
   include ::profile::ruby
