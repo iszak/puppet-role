@@ -2,6 +2,8 @@ class role::dashboard (
   $monitor,
   $monitor_backend = undef,
 ) {
+  include profile::base
+
   validate_bool($monitor)
   validate_string($monitor_backend)
 
