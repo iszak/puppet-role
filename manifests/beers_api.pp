@@ -1,4 +1,4 @@
-class role::1001_beers_api (
+class role::beers_api (
   $user,
   $owner,
   $group,

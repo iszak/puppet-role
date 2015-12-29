@@ -1,4 +1,4 @@
-class role::1001_beers_website (
+class role::beers_website (
     $user,
     $owner,
     $group,
